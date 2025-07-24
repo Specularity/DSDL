@@ -33,6 +33,7 @@ uint2 STATE_RUNNING = 2
 #
 uint2 STATE_FAULT = 3
 
+uint5 turbine_state #jetcat healthy state
 #
 # General status flags.
 # Note that not all flags are required. Those that aren't are prepended with a validity flag, which is, obviously,
@@ -107,8 +108,8 @@ uint7 engine_load_percent
 # Engine speed.
 # Unit: revolutions per minute.
 #
-uint17 engine_speed_rpm
-
+#uint17 engine_speed_rpm
+uint32 engine_speed_rpm
 #
 # Spark dwell time.
 # Unit: millisecond.
