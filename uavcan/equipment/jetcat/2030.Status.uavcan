@@ -1,0 +1,75 @@
+# Custom JetCat Turbine Status Message
+# Maps data from JetCat Serial Protocol Messages 0x01, 0x02, 0x04, 0x05, 0x06
+#
+# ID: 2030 (Ensure this ID does not conflict with other custom messages)
+
+# ==============================================================================
+# 1. LIVE FLIGHT DATA (Updated 1Hz - 10Hz)
+# ==============================================================================
+
+uint32 rpm_actual               # Actual Engine RPM
+uint32 rpm_setpoint             # Target/Commanded RPM
+
+float16 throttle_percent        # Actual Throttle Position [0-100%]
+
+float16 egt_celsius             # Exhaust Gas Temperature [deg C]
+uint8 turbine_state             # Engine State Code (See JetCat Manual Table 1)
+
+# --- Electrical System ---
+float16 pump_voltage_actual     # Actual Pump Voltage [V]
+float16 battery_voltage         # ECU Battery Voltage [V]
+float16 generator_voltage       # Generator Output Voltage [V]
+float16 generator_current       # Generator Output Current [A]
+uint8 battery_level_percent     # ECU Battery Level [0-100%]
+
+# --- Fuel & Consumption ---
+float16 fuel_flow_ml_min        # Fuel Flow Rate [ml/min]
+float32 fuel_consumed_ml        # Total Fuel Consumed this run [ml]
+uint8 fuel_remaining_percent    # Fuel Remaining [0-100%]
+
+# --- Performance & Environment ---
+float16 thrust_newtons          # Generated Thrust [N]
+float16 ambient_pressure_kpa    # Ambient Pressure [kPa]
+float16 baro_altitude_m         # Barometric Altitude [m]
+float16 airspeed_kmh            # Airspeed [km/h] (If sensor connected)
+
+# ==============================================================================
+# 2. HEALTH & DIAGNOSTICS (Updated on Request)
+# ==============================================================================
+
+# Component Status Flags
+# 0 = Not Tested
+# 1 = OK
+# >1 = Specific Error Code (See Manual Page 18)
+uint8 status_starter
+uint8 status_fuel_pump
+uint8 status_egt_sensor
+uint8 status_ignitor
+uint8 status_valves             # Combined Main/Gas valve status
+uint8 status_rpm_sensor
+
+uint16 warning_bitfield         # General Warning Flags
+bool general_error              # True if any component status > 1
+
+# ==============================================================================
+# 3. HISTORY: LAST SHUTDOWN (Updated 1Hz)
+# ==============================================================================
+
+uint8 last_off_condition        # Reason for last shutdown (See JetCat Manual Table 2)
+uint32 last_off_rpm             # RPM when shutdown occurred
+float16 last_off_egt            # EGT when shutdown occurred [deg C]
+float16 last_off_pump_voltage   # Pump Voltage at shutdown [V]
+uint8 last_off_state            # Turbine State at shutdown
+
+# ==============================================================================
+# 4. SYSTEM STATISTICS (Updated 0.25Hz)
+# ==============================================================================
+
+uint16 serial_number            # Engine Serial Number
+float16 firmware_version        # Firmware Version (e.g., 12.33)
+float32 total_runtime_hours     # Total Engine Runtime [Hours]
+uint8 oem_code                  # OEM ID Code (0 = Standard)
+
+uint16 successful_starts        # Count of successful starts
+uint16 failed_ignitions         # Count of failed ignitions
+uint16 low_battery_cutouts      # Count of Low Battery Cutouts
